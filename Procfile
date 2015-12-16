@@ -1,0 +1,1 @@
+web: RAILS_LOG_LEVEL=debug bundle exec rails server -p $PORT
