@@ -1,0 +1,3 @@
+[submodule "vendor/todomvc"]
+	path = vendor/todomvc
+	url = https://github.com/tastejs/todomvc.git
