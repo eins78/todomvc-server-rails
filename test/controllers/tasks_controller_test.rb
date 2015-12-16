@@ -6,19 +6,31 @@ class TasksControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should get create" do
-    get :create
-    assert_response :success
+  test "should create" do
+    post :create, task: {title: 'hello world'}
+    assert_redirected_to tasks_path
   end
 
-  test "should get update" do
-    get :update
-    assert_response :success
+  test "should update 'title'" do
+    task = Task.create(title: 'hello')
+    patch :update, id: task.id, task: {title: 'world'}
+    assert_redirected_to tasks_path
+    task.reload
+    assert task.title == 'world', 'changed in db'
   end
 
-  test "should get destroy" do
-    get :destroy
-    assert_response :success
+  test "should update 'completed'" do
+    task = Task.create(title: 'foo')
+    patch :update, id: task.id, task: {completed: true}
+    assert_redirected_to tasks_path
+    task.reload
+    assert task.completed == true, 'changed in db'
+  end
+
+  test "should destroy" do
+    task = Task.create(title: 'foo')
+    delete :destroy, id: task.id
+    assert_redirected_to tasks_path
   end
 
 end
