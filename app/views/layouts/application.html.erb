@@ -1,14 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Todomvc</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+<!doctype html>
+<!-- based on vendor/todomvc/examples/vanillajs/index.html -->
+<html lang="en" data-framework="rails-static">
+  <head>
+    <meta charset="utf-8">
+    <title>TodoMVC Server</title>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <!-- React app will init into this container -->
+    <section class="todoapp">
+      <%= yield %>
+    </section>
 
-<%= yield %>
+    <footer class="info">
+      <p>Click to edit a todo</p>
+      <!-- <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
+			<p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p> -->
+    </footer>
 
-</body>
+    <%= javascript_include_tag  'application' %>
+  </body>
 </html>
