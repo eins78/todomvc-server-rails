@@ -1,2 +1,86 @@
-<h1>Tasks#index</h1>
-<p>Find me in app/views/tasks/index.html.erb</p>
+<%
+  count = @get.count
+  has_completed = @get.count
+  mode = filter_mode(params)
+  @mode = mode
+  # byebug
+  def filter_toggle_class(type)
+    if @mode == type then 'selected' end
+  end
+%>
+
+<header class="header">
+  <h1>todos</h1>
+
+  <%= form_for Task.new do |f| %>
+    <%= f.text_field(
+          :title,
+          autofocus: '',
+          class: 'new-todo',
+          placeholder: 'What needs to be done?') %>
+  <% end %>
+</header>
+
+<section class="main" style="display: block;">
+  <!-- <input class="toggle-all" type="checkbox">
+  <label for="toggle-all">Mark all as complete</label> -->
+  <ul class="todo-list">
+
+    <% @get.each do |task| %>
+      <li class="<% task.completed ? 'completed' : '' %>" data-id="<%= task.id %>">
+        <div class="view">
+
+          <%#  <input class="toggle" type="checkbox">  #%>
+          <%= form_for task, method: :patch do |f| %>
+            <%= f.button(type: :submit, class: 'toggle') do %>
+              <%= f.hidden_field(:completed, value: (!task.completed)) %>
+              <input type="checkbox" name="task[completed]"
+                value="<% task.completed ? 1 : 0 %>"
+                <%= task.completed ? 'checked' : '' %>
+                style="left: 9px; top: 20px; position: absolute;">
+            <% end %>
+          <% end %>
+
+          <%# <label>title</label>  #%>
+          <%= form_for task, method: :patch do |f|
+            #  NOTE: css expects <label>, add missing styles here
+            inline_style = 'border: medium none; font: 24px/1.2 "Helvetica Neue",Helvetica,Arial,sans-serif; font-weight: 300; white-space: pre-line; word-break: break-all; padding: 15px 60px 15px 15px; margin-left: 45px; display: block; transition: color 0.4s ease 0s;'
+            if task.completed
+              inline_style += 'color: #d9d9d9;text-decoration: line-through;'
+            end
+            f.text_field :title, style: inline_style
+          end %>
+
+          <%= form_for task, method: :delete do |f| %>
+            <%= f.button("", type: :submit, class: 'destroy') %>
+          <% end %>
+
+        </div>
+      </li>
+    <% end %>
+
+  </ul>
+</section>
+
+<footer class="footer" style="display: block;">
+
+  <span class="todo-count"><strong>
+    <%= count %></strong> items <!-- left --></span>
+
+  <ul class="filters">
+    <li><a class="<%= filter_toggle_class(nil) %>" href="?">
+      All</a></li>
+
+    <li><a class="<%= filter_toggle_class(:active) %>" href="?active">
+      Active</a></li>
+
+    <li><a class="<%= filter_toggle_class(:completed) %>" href="?completed">
+      Completed</a></li>
+  </ul>
+
+  <% if has_completed %>
+    <!-- <button class="clear-completed" style="display: block;">
+      Clear completed
+    </button> -->
+  <% end %>
+</footer>
